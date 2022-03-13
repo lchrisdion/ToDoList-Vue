@@ -1,8 +1,13 @@
 <template>
   <div class="home m-2">
-    <ToDoTitleForm @add-to-do-item="addToDoItem"></ToDoTitleForm>
     <div class="md:flex overflow-x-auto">
       <ToDoCard v-for="(item, index) in toDos" :key="index" :item="item" />
+    </div>
+    <div v-if="isAddingItem">
+      <ToDoTitleForm @add-to-do-item="addToDoItem"></ToDoTitleForm>
+    </div>
+    <div v-else>
+      <button class="add-item-button" @click.prevent="inputToDoTitle">+</button>
     </div>
   </div>
 </template>
@@ -17,13 +22,25 @@ export default {
     ToDoCard,
     ToDoTitleForm,
   },
-  state: { },
+  state: {},
   data() {
-    return {toDos: [] };
+    return {};
+  },
+  computed: {
+    toDos() {
+      return this.$store.state.toDos;
+    },
+    isAddingItem() {
+      return this.$store.state.isAddingItem;
+    },
   },
   methods: {
     addToDoItem(toDoItem) {
-      this.toDos.push(toDoItem);
+      console.log(toDoItem);
+      this.$store.dispatch("addToDoItem", toDoItem);
+    },
+    inputToDoTitle() {
+      this.$store.dispatch("setIsInputItem", true);
     },
   },
 };
