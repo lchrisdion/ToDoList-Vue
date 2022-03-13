@@ -1,4 +1,4 @@
-# testing-web
+# to-do-list
 
 ## Project setup
 ```
