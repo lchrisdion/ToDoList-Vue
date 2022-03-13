@@ -1,13 +1,18 @@
 <template>
   <div class="home m-2">
     <div class="md:flex overflow-x-auto">
-      <ToDoCard v-for="(item, index) in toDos" :key="index" :item="item" />
+      <ToDoCard
+        v-for="(item, index) in toDoList"
+        :key="index"
+        :item="item"
+        :index="index"
+      />
     </div>
     <div v-if="isAddingItem">
       <ToDoTitleForm @add-to-do-item="addToDoItem"></ToDoTitleForm>
     </div>
     <div v-else>
-      <button class="add-item-button" @click.prevent="inputToDoTitle">+</button>
+      <button class="container flex py-5 font-bold" @click.prevent="inputToDoTitle">+ Add a card</button>
     </div>
   </div>
 </template>
@@ -27,8 +32,8 @@ export default {
     return {};
   },
   computed: {
-    toDos() {
-      return this.$store.state.toDos;
+    toDoList() {
+      return this.$store.state.toDoList;
     },
     isAddingItem() {
       return this.$store.state.isAddingItem;
@@ -36,7 +41,6 @@ export default {
   },
   methods: {
     addToDoItem(toDoItem) {
-      console.log(toDoItem);
       this.$store.dispatch("addToDoItem", toDoItem);
     },
     inputToDoTitle() {

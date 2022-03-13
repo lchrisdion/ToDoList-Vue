@@ -2,26 +2,45 @@ import { createStore } from "vuex";
 
 export default createStore({
   state: {
-    toDos: [],
+    toDoList: [],
     isAddingItem: false,
   },
   getters: {},
   mutations: {
-    setToDoList(state, toDoItem) {
-      state.toDos.push(toDoItem);
+    setToDoList(state, toDoList) {
+      state.toDoList = toDoList;
     },
     setIsInputItem(state, isAddingItem) {
       state.isAddingItem = isAddingItem;
-    }
+    },
   },
   actions: {
-    addToDoItem(context, toDoItem) {
-      console.log(toDoItem.title);
-      context.commit('setToDoList', toDoItem)
+    addToDoItem({ context, state }, toDoItem) {
+      try {
+        console.log(toDoItem.title);
+        let currentToDoList = state.toDoList;
+        currentToDoList.push(toDoItem);
+        context.commit("setToDoList", currentToDoList);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    removeToDoItem({ context, state }, index) {
+      try {
+        let currentToDoList = state.toDoList;
+        currentToDoList.pop(index);
+        context.commit("setToDoList", currentToDoList);
+      } catch (error) {
+        console.log(error);
+      }
     },
     setIsInputItem(context, isAddingItem) {
-      context.commit('setIsInputItem', isAddingItem)
-    }
+      try {
+        context.commit("setIsInputItem", isAddingItem);
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
   modules: {},
 });
