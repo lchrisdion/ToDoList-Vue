@@ -1,3 +1,4 @@
+import axios from "../../config/axios";
 import { createStore } from "vuex";
 
 export default createStore({
@@ -15,24 +16,39 @@ export default createStore({
     },
   },
   actions: {
-    addToDoItem({ context, state }, toDoItem) {
-      try {
-        console.log(toDoItem.title);
-        let currentToDoList = state.toDoList;
-        currentToDoList.push(toDoItem);
-        context.commit("setToDoList", currentToDoList);
-      } catch (error) {
-        console.log(error);
-      }
+    addToDoItem(context, toDoItem) {
+      const access_token = process.env.VUE_APP_TOKEN;
+      axios({
+        url: "todos",
+        method: "POST",
+        headers: { access_token: access_token },
+        data: toDoItem,
+      })
+        .then((response) => {
+          console.log(response);
+          context.dispatch("getToDoItem");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
-    removeToDoItem({ context, state }, index) {
-      try {
-        let currentToDoList = state.toDoList;
-        currentToDoList.pop(index);
-        context.commit("setToDoList", currentToDoList);
-      } catch (error) {
-        console.log(error);
-      }
+    removeToDoItem(context, id) {
+      console.log("ok");
+      console.log(id);
+      axios({
+        method: "DELETE",
+        url: `todos/${id}`,
+        headers: {
+          access_token: process.env.VUE_APP_TOKEN,
+        },
+      })
+        .then((response) => {
+          console.log(response);
+          context.dispatch("getToDoItem");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
     setIsInputItem(context, isAddingItem) {
       try {
@@ -40,6 +56,21 @@ export default createStore({
       } catch (error) {
         console.log(error);
       }
+    },
+    getToDoItem(context) {
+      const access_token = process.env.VUE_APP_TOKEN;
+      axios({
+        url: "todos",
+        method: "GET",
+        headers: { access_token: access_token },
+      })
+        .then((response) => {
+          console.log(response);
+          context.commit("setToDoList", response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
   },
   modules: {},

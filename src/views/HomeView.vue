@@ -12,7 +12,12 @@
       <ToDoTitleForm @add-to-do-item="addToDoItem"></ToDoTitleForm>
     </div>
     <div v-else>
-      <button class="container flex py-5 font-bold" @click.prevent="inputToDoTitle">+ Add a card</button>
+      <button
+        class="container flex py-5 font-bold"
+        @click.prevent="inputToDoTitle"
+      >
+        + Add a card
+      </button>
     </div>
   </div>
 </template>
@@ -31,8 +36,12 @@ export default {
   data() {
     return {};
   },
+  created(){
+    this.$store.dispatch("getToDoItem");
+  },
   computed: {
     toDoList() {
+      console.log(this.$store.state.toDoList.length);
       return this.$store.state.toDoList;
     },
     isAddingItem() {
